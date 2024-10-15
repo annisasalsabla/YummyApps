@@ -1,44 +1,54 @@
 package com.annisa.yummyapps.adapter
 
+import android.content.Intent
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
+import com.annisa.yummyapps.DetailOrdersActivity
 import com.annisa.yummyapps.R
 import com.annisa.yummyapps.model.ModelListOrder
 
-class OrderAdapter(private val orders: List<ModelListOrder>, private val listener: (ModelListOrder) -> Unit) :
-    RecyclerView.Adapter<OrderAdapter.OrderViewHolder>() {
+class OrderAdapter (
+    val itemListMakanan: List<ModelListOrder>
+): RecyclerView.Adapter<OrderAdapter.MyviewHolder>() {
+    class MyviewHolder(itemView : View) : RecyclerView.ViewHolder(itemView) {
+        var txtNamaMakanan : TextView = itemView.findViewById(R.id.txtNamaMakanan)
+        var imgMakanan : ImageView = itemView.findViewById(R.id.imgMakanan)
+        var txtTanggal : TextView = itemView.findViewById(R.id.txtTanggal)
+        var txtHarga : TextView = itemView.findViewById(R.id.txtHarga)
+        var txtItem : TextView = itemView.findViewById(R.id.txtJumlahItem)
 
-    class OrderViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-        val imageView: ImageView = itemView.findViewById(R.id.orderImage)
-        val nameView: TextView = itemView.findViewById(R.id.orderName)
-        val priceView: TextView = itemView.findViewById(R.id.orderPrice)
-        val dateView: TextView = itemView.findViewById(R.id.orderDate)
-        val itemCountView: TextView = itemView.findViewById(R.id.itemCount)
+    }
 
-        fun bind(order: ModelListOrder, listener: (ModelListOrder) -> Unit) {
-            imageView.setImageResource(order.imageResId)
-            nameView.text = order.name
-            priceView.text = order.price
-            dateView.text = order.date
-            itemCountView.text = "${order.items} items"
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MyviewHolder {
+        val nView = LayoutInflater.from(parent.context)
+            .inflate(R.layout.item_order,parent,false)
+        return MyviewHolder(nView)
+    }
 
-            itemView.setOnClickListener { listener(order) }
+    override fun getItemCount(): Int {
+        return itemListMakanan.size
+    }
+
+    override fun onBindViewHolder(holder: MyviewHolder, position: Int) {
+        val currentItem = itemListMakanan[position]
+        holder.txtNamaMakanan.setText(currentItem.Nama)
+        holder.imgMakanan.setImageResource(currentItem.image)
+        holder.txtTanggal.setText(currentItem.Tanggal)
+        holder.txtItem.setText(currentItem.Item)
+
+
+        holder.itemView.setOnClickListener {
+            val context = holder.itemView.context
+            val intent = Intent(context, DetailOrdersActivity::class.java).apply {
+                // Mengirim data melalui intent
+                putExtra("namaMakanan", currentItem.Nama)
+                putExtra("photoMakanan", currentItem.image)
+            }
+            context.startActivity(intent)
         }
     }
-
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): OrderViewHolder {
-        val view = LayoutInflater.from(parent.context)
-            .inflate(R.layout.item_order, parent, false)
-        return OrderViewHolder(view)
-    }
-
-    override fun onBindViewHolder(holder: OrderViewHolder, position: Int) {
-        holder.bind(orders[position], listener)
-    }
-
-    override fun getItemCount() = orders.size
 }

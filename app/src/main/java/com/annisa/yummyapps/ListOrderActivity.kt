@@ -9,25 +9,33 @@ import com.annisa.yummyapps.adapter.OrderAdapter
 import com.annisa.yummyapps.model.ModelListOrder
 
 class ListOrderActivity : AppCompatActivity() {
-
+    private lateinit var RecyclerViewMakanan : RecyclerView
+    private lateinit var AdapterMakanan : OrderAdapter
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_list_order)
 
-        val orders = listOf(
-            ModelListOrder(R.drawable.chickencurry, "Chicken Curry", "$50.00", "29 Nov, 01:20 pm", 2),
-            ModelListOrder(R.drawable.burger, "Bean and Vegetable Burger", "$50.00", "10 Nov, 06:05 pm", 2),
-            ModelListOrder(R.drawable.kopi, "Coffee Latte", "$8.00", "10 Nov, 08:30 am", 1),
-            ModelListOrder(R.drawable.starberi, "Strawberry Cheesecake", "$22.00", "03 Oct, 03:40 pm", 2)
+        val menuMakanan = listOf(
+            ModelListOrder(
+                R.drawable.chickencurry,
+                "Chicken Curry",
+                "29 nov, 01.09 pm",
+                "$50.00",
+                "2 Items"
+            ),
+            ModelListOrder(R.drawable.burger, "Bean burger", "10 mei, 06.10 pm", "$50.00", "2 Items"),
+            ModelListOrder(R.drawable.kopi, "Coffe latte", "06 nov, 02.09 pm", "$50.00", "2 Items"),
+            ModelListOrder(R.drawable.chickencurry, "Chicken Curry", "07 nov, 07.45 pm", "$50.00", "2 Items"),
+            ModelListOrder(R.drawable.starberi, "Strawberry", "24 june, 07.00 pm", "$50.00", "2 Items")
+
         )
 
-        val recyclerView: RecyclerView = findViewById(R.id.recyclerView)
-        recyclerView.layoutManager = LinearLayoutManager(this)
-        recyclerView.adapter = OrderAdapter(orders) { order ->
-            val intent = Intent(this, DetailOrdersActivity::class.java)
-            intent.putExtra("order", order)
-            startActivity(intent)
-        }
+
+        RecyclerViewMakanan = findViewById(R.id.RvMakanan)
+        RecyclerViewMakanan.layoutManager =
+            LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false)
+        AdapterMakanan = OrderAdapter(menuMakanan)
+        RecyclerViewMakanan.adapter = AdapterMakanan
     }
-}
+    }
 
